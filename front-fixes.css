@@ -41,7 +41,7 @@
   content:"";
   position:absolute;
   inset:0;
-  background-image: url("logo.png"), url("logo.png");
+  background-image: url("logowoter.png"), url("logowoter.png");
   background-repeat: no-repeat, no-repeat;
   background-position: left 4% center, right 4% center;
   background-size: 110px auto, 110px auto;
