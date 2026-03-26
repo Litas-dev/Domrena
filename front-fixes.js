@@ -45,6 +45,11 @@ document.addEventListener('DOMContentLoaded', function () {
   wrap.appendChild(left);
   wrap.appendChild(right);
   var idx = 0;
+  var isMobile = window.matchMedia('(max-width: 768px)').matches;
+  function advance(dir){
+    idx = (idx + dir + slides.length) % slides.length;
+    setActive(idx, dir < 0 ? 'prev' : 'next');
+  }
   function setActive(i, dir){
     slides.forEach(function(s, k){
       s.classList.toggle('active', k === i);
@@ -54,8 +59,13 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
   }
-  left.addEventListener('click', function () { idx = (idx - 1 + slides.length) % slides.length; setActive(idx, 'prev'); pauseThenResume(); });
-  right.addEventListener('click', function () { idx = (idx + 1) % slides.length; setActive(idx, 'next'); pauseThenResume(); });
+  if (!isMobile) {
+    left.addEventListener('click', function () { advance(-1); pauseThenResume(); });
+    right.addEventListener('click', function () { advance(1); pauseThenResume(); });
+  } else {
+    left.style.display = 'none';
+    right.style.display = 'none';
+  }
 
   // Touch swipe (mobile)
   var startX = 0, startY = 0, swiping = false;
@@ -80,7 +90,7 @@ document.addEventListener('DOMContentLoaded', function () {
   // Autoplay "organic"
   var timer = null;
   function randomDelay(){ return 4000 + Math.round(Math.random() * 3000); }
-  function next(){ right.click(); }
+  function next(){ advance(1); }
   function schedule(){ timer = setTimeout(next, randomDelay()); }
   function pause(){ if (timer) { clearTimeout(timer); timer = null; } }
   function resume(){ if (!timer) schedule(); }
